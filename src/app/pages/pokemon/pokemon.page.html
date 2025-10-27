@@ -5,22 +5,39 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <form (submit)="buscarPokemon()">
+    <ion-item>
+      <ion-input [(ngModel)]="nombreBusqueda" name="nombreBusqueda" placeholder="Buscar Pokemon"></ion-input>
+      <ion-button type="submit">Buscar</ion-button>
+    </ion-item>
+  </form>
+
   <ion-spinner *ngIf="isLoading"></ion-spinner>
 
   <ion-grid *ngIf="!isLoading">
     <ion-row>
       <ion-col size="6" *ngFor="let p of pokemons">
         <ion-card>
-          <img [src]="p.sprites.front_default" alt="{{p.name}}">
-          <ion-card-header>
-            <ion-card-title>{{ p.name | titlecase }}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <img [src]="p.sprites.front_default" alt="{{p.name}}" (click)="mostrarDetalles(p)" style="margin: 16px auto;" />
+            <ion-card-header style="text-align: center; width: 100%;">
+              <ion-card-title>{{ p.name | titlecase }}</ion-card-title>
+            </ion-card-header>
+          </div>
+          <ion-card-content *ngIf="pokemonSeleccionado === p">
             <p><strong>Altura:</strong> {{ p.height }}</p>
             <p><strong>Peso:</strong> {{ p.weight }}</p>
             <p><strong>Tipo:</strong> {{ p.types[0].type.name }}</p>
           </ion-card-content>
         </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button expand="block" (click)="anteriorPagina()" [disabled]="pagina === 0">Anterior</ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block" (click)="siguientePagina()">Siguiente</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

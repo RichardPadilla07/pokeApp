@@ -12,7 +12,7 @@ export class PokeApp {
   constructor(private http: HttpClient) { }
 
   getPokemonList(limit: number = 10, offset: number = 0): Observable<any> {
-    return this.http.get<any>(`${this.API_URL}/pokemon?limit=${limit}`).pipe(
+    return this.http.get<any>(`${this.API_URL}/pokemon?limit=${limit}&offset=${offset}`).pipe(
       switchMap(response => {
         const pokemonDetails$ = response.results.map((pokemon: any) => this.http.get(pokemon.url));
         return forkJoin(pokemonDetails$);
@@ -20,4 +20,7 @@ export class PokeApp {
     );
   }
 
+  getPokemonByName(name: string) {
+    return this.http.get<any>(`${this.API_URL}/pokemon/${name}`);
+  }
 }
